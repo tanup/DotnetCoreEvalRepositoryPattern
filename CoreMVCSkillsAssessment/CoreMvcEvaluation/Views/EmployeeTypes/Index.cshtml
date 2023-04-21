@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CoreMvcEvaluation.Models.EmployeeType>
+
+@{
+    ViewBag.Title = "Employee Types";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div id="jsGrid"></div>
+
+@section Scripts {
+    <script>
+    var employeetypes = [
+        @foreach(EmployeeType et in Model)
+        {
+            <text>{ "Name": "@et.Name", "SortOrder": "@et.SortOrder", "Actions": "<a href=\"@Url.Action("Edit","EmployeeTypes")/@et.Id\">Edit</a> | <a href=\"@Url.Action("Details","EmployeeTypes")/@et.Id\">Detail</a> | <a href=\"@Url.Action("Delete","EmployeeTypes")/@et.Id\">Delete</a>" }</text> if (et != (EmployeeType)Model.Last()) { <text>,</text> }
+        }
+    ];
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "400px",
+
+        data: employeetypes,
+
+        fields: [
+            { name: "Name", type: "text", title: "@Html.DisplayNameFor(model => model.Name)" },
+            { name: "SortOrder", type: "text", title: "@Html.DisplayNameFor(model => model.SortOrder)" },
+            { name: "Actions", type: "text", title: "Actions" },
+        ]
+    });
+    </script>
+}

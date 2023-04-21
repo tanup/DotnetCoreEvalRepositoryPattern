@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CoreMvcEvaluation.Models.User>
+
+@{
+    ViewBag.Title = "Users";
+    CoreMvcEvaluation.Models.UserService svcUser = new CoreMvcEvaluation.Models.UserService();
+    CoreMvcEvaluation.ViewModels.UserViewModel uvm = new CoreMvcEvaluation.ViewModels.UserViewModel(svcUser.getUser(1));
+}
+
+<h2>User List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div id="jsGrid"></div>
+
+
+@section Scripts {
+    <script>
+    var clients = [
+        @foreach(User u in Model)
+        {
+            <text>{ "DisplayName": "@u.getDisplayNameLastFirst()", "Email": "@u.Email", "CompanyName": "@u.CompanyName", "IsActive": "@u.IsActive", "LastLogin": "@u.LastLogin", "Actions": "<a href=\"@Url.Action("Details","Users")/@u.Id\">Detail</a> | <a href=\"@Url.Action("Delete","Users")/@u.Id\">Delete</a>" }</text> if (u != (User)Model.Last()) { <text>,</text> }
+        }
+    ];
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "400px",
+
+        data: clients,
+
+        fields: [
+            { name: "Email", type: "text", title: "Email" },
+            { name: "DisplayName", type: "text", title: "Display Name" },
+            { name: "CompanyName", type: "text", title: "Company Name" },
+            { name: "IsActive", type: "checkbox", title: "Is Active" },
+            { name: "LastLogin", type: "text", title: "Last Login" },
+            { name: "Actions", type: "text", title: "Actions" },
+        ]
+    });
+    </script>
+}
